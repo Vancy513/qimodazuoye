@@ -29,12 +29,12 @@
 | --- | --- | --- |
 | 至少 4 类可控制设备 | 吸顶灯、空调、窗帘、加湿器 | `LabDefaults.ets` `createDefaultDevices()` |
 | 至少 3 项可调整模拟环境数据 | 温度、湿度、光照、人员状态（4 项） | `LabTypes.ets` `EnvState` |
-| 新增 / 修改 / 启停至少 4 条规则 | 预置 5 条，支持新建、编辑、启停、删除 | `pages/Index.ets` 规则库 / 编辑器 |
+| 新增 / 修改 / 启停至少 4 条规则 | 预置 6 条，支持新建、编辑、启停、删除 | `pages/Index.ets` 规则库 / 编辑器 |
 | 含 1 条双条件规则 | 「昏暗开灯」= 光照 < 30% 且 有人 | `LabDefaults.ets` `rule_light_dark` |
 | 规则引擎按实际输入计算触发结果 | 纯函数 `runRules()`，逐条件求值 | `engine/RuleEngine.ets` |
 | 记录触发条件、设备变化、执行顺序 | `TriggerRecord`：env / matchedRules / steps / changes / conflicts | `LabTypes.ets` |
 | 冲突有明确执行顺序或优先级 | 优先级高者先执行，同优先级按列表顺序，被压制者写入冲突记录 | `runRules()` |
-| 至少 2 组环境场景演练 | 4 组场景：白天自习 / 深夜休息 / 回南天 / 夏日午后 | `LabDefaults.ets` `createDefaultScenes()` |
+| 至少 2 组环境场景演练 | 5 组场景：白天自习 / 深夜休息 / 回南天 / 夏日午后 / 空宿舍午后 | `LabDefaults.ets` `createDefaultScenes()` |
 | 保存设备设置、规则和执行记录 | Preferences 存 5 组 JSON | `data/LabRepository.ets` |
 | 重启恢复 | 冷启动读取 Preferences，损坏时回落默认数据 | `Index.bootstrap()` |
 | 至少 6 条自动化测试 | 10 条，覆盖正常 / 边界 / 异常 | `entry/src/test/RuleEngine.test.ets` |
@@ -71,7 +71,7 @@
 2. 首次打开会提示 Sync，等待 `oh_modules` 安装完成（依赖仅 `@ohos/hypium`、`@ohos/hamock`）。
 3. 配置签名：`File > Project Structure > Signing Configs` 勾选 `Automatically generate signature`（需登录华为账号）。
 4. 选择设备（模拟器或真机）后点击 ▶ Run 'entry'。
-5. 首次启动会自动写入 4 台设备、5 条规则、4 组场景。
+5. 首次启动会自动写入 4 台设备、6 条规则、5 组场景。
 
 > 命令行构建（可选）：
 > ```powershell
@@ -141,7 +141,7 @@ runRules(rules, devices, env, now, recordId)
   5. 输出：新的设备数组 + TriggerRecord
 ```
 
-设备数值统一用 `clamp(value, min, max)` 收敛，避免规则写出越界值。
+设备数值方面：**开启类动作**用 `clamp(value, min, max)` 收敛到可调区间，避免规则写出越界值；**关闭类动作**保留设备原有设定值不改，因此日志里只会写「关闭」，不会出现「关闭 16℃」这类无意义数值。
 
 ### 6.3 冲突处理策略
 
@@ -195,10 +195,10 @@ runRules(rules, devices, env, now, recordId)
 | 文件 | 应截取的内容 |
 | --- | --- |
 | `docs/images/console.png` | 控制台页：环境滑块 + 4 张设备卡片 + 运行按钮 |
-| `docs/images/rules.png` | 规则库页：5 条规则卡片，含「双条件规则」标签 |
+| `docs/images/rules.png` | 规则库页：6 条规则卡片，含「双条件规则」标签 |
 | `docs/images/editor.png` | 规则编辑器：条件/动作编辑界面 |
 | `docs/images/logs.png` | 日志页：展开后的执行顺序与冲突处理 |
-| `docs/images/scenes.png` | 场景页：4 组场景卡片 |
+| `docs/images/scenes.png` | 场景页：5 组场景卡片 |
 | `docs/images/restore.png` | 杀掉进程重开后数据仍在的对比截图 |
 
 ---
@@ -208,6 +208,7 @@ runRules(rules, devices, env, now, recordId)
 | 日期 | 内容 |
 | --- | --- |
 | 2026-11-13 | 需求分析与选题确定；完成领域模型、规则引擎、持久化封装与主界面四个工作区；编写 10 条单元测试并通过本地验证 |
+| 2026-11-13 | 运行后发现「深夜休息」场景不产生冲突：该场景无人，而「昏暗开灯」要求有人，两条规则条件互斥。补充「无人省电关空调」规则与「空宿舍午后」场景，使冲突可稳定复现；同时修正关闭类动作不改动数值的问题 |
 
 > 后续按实际进度继续追加，**不要伪造时间**。每次提交对应一行即可。
 

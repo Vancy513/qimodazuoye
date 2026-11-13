@@ -1050,7 +1050,7 @@ struct Index {
                 .backgroundColor(COLOR_PRIMARY)
                 .borderRadius(8)
               Text(step.ruleName + ' → ' + step.deviceName + ' ' +
-                (step.targetPower ? '开启' : '关闭') + ' ' + step.targetValue)
+                (step.targetPower ? '开启 ' + step.targetValue : '关闭'))
                 .fontSize(11)
                 .fontColor(COLOR_TEXT)
                 .layoutWeight(1)

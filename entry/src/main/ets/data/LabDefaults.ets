@@ -44,7 +44,7 @@ export function createDefaultEnv(): EnvState {
   return env;
 }
 
-/** 5 条预置规则：含 1 条双条件规则，且预置了一组可复现的优先级冲突 */
+/** 6 条预置规则：含 1 条双条件规则，且预置了一组可复现的优先级冲突 */
 export function createDefaultRules(): AutomationRule[] {
   const rules: AutomationRule[] = [
     {
@@ -66,6 +66,11 @@ export function createDefaultRules(): AutomationRule[] {
       actions: [{ deviceId: 'dev_light', power: false, value: 0 }]
     },
     {
+      id: 'rule_ac_eco', name: '无人省电关空调', enabled: true, priority: 5,
+      conditions: [{ key: ENV_OCCUPANCY, op: OP_EQ, value: 0 }],
+      actions: [{ deviceId: 'dev_ac', power: false, value: 0 }]
+    },
+    {
       id: 'rule_humidify', name: '干燥加湿', enabled: true, priority: 2,
       conditions: [{ key: ENV_HUMIDITY, op: OP_LT, value: 40 }],
       actions: [{ deviceId: 'dev_humidifier', power: true, value: 60 }]
@@ -79,7 +84,7 @@ export function createDefaultRules(): AutomationRule[] {
   return rules;
 }
 
-/** 4 组环境演练场景（满足「至少 2 组」要求） */
+/** 5 组环境演练场景（满足「至少 2 组」要求） */
 export function createDefaultScenes(): ScenePreset[] {
   const scenes: ScenePreset[] = [
     {
@@ -87,7 +92,7 @@ export function createDefaultScenes(): ScenePreset[] {
       env: { temp: 26, humidity: 52, light: 82, occupancy: 1 }
     },
     {
-      id: 'scene_night', name: '深夜休息', desc: '昏暗且无人，触发「无人熄灯」并压制「昏暗开灯」',
+      id: 'scene_night', name: '深夜休息', desc: '昏暗且无人，「昏暗开灯」因要求有人而不命中，验证条件互斥时不会误报冲突',
       env: { temp: 24, humidity: 60, light: 8, occupancy: 0 }
     },
     {
@@ -97,6 +102,10 @@ export function createDefaultScenes(): ScenePreset[] {
     {
       id: 'scene_summer', name: '夏日午后', desc: '高温、低湿、昏暗且有人，多条规则同时命中',
       env: { temp: 31, humidity: 36, light: 22, occupancy: 1 }
+    },
+    {
+      id: 'scene_empty', name: '空宿舍午后', desc: '30℃ 但房间无人：「无人省电关空调」与「高温开空调」冲突，前者优先级更高',
+      env: { temp: 30, humidity: 55, light: 60, occupancy: 0 }
     }
   ];
   return scenes;

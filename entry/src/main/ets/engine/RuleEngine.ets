@@ -158,7 +158,8 @@ export function runRules(rules: AutomationRule[], devices: DeviceState[], env: E
       }
       const beforePower: boolean = target.power;
       const beforeValue: number = target.value;
-      const afterValue: number = clamp(action.value, target.min, target.max);
+      // 开启类动作把数值收敛到设备可调区间；关闭类动作保留原设定值，避免出现「关闭 16℃」这类无意义数值
+      const afterValue: number = action.power ? clamp(action.value, target.min, target.max) : target.value;
       target.power = action.power;
       target.value = afterValue;
       claimedDeviceIds.push(action.deviceId);
