@@ -1,0 +1,16 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "智能宿舍自动化规则编排应用"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "联动实验室：条件触发、设备联动与场景演练"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "联动实验室"
+    }
+  ]
+}
