@@ -190,7 +190,7 @@ runRules(rules, devices, env, now, recordId)
 
 ## 八、运行截图
 
-> 截图目录：`docs/images/`。请按下表在模拟器/真机上运行后截图并覆盖同名文件。
+> 截图目录：`docs/images/`，均为模拟器运行后的实机截图。
 
 | 文件 | 应截取的内容 |
 | --- | --- |
@@ -199,7 +199,10 @@ runRules(rules, devices, env, now, recordId)
 | `docs/images/editor.png` | 规则编辑器：条件/动作编辑界面 |
 | `docs/images/logs.png` | 日志页：展开后的执行顺序与冲突处理 |
 | `docs/images/scenes.png` | 场景页：5 组场景卡片 |
-| `docs/images/restore.png` | 杀掉进程重开后数据仍在的对比截图 |
+| `docs/images/restore.png` | 杀掉进程重开后，规则与设备状态仍在 |
+| `docs/images/logs.png` | 日志页：命中 3 条规则并记录冲突处理 |
+
+**运行录屏**：[docs/images/Emulator 2026-11-13 14-33-02.mp4](docs/images/Emulator%202026-11-13%2014-33-02.mp4)（约 12 MB，完整演示「调整环境 → 运行联动 → 查看冲突日志 → 重启恢复」）
 
 ---
 
